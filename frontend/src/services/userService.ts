@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const API_URL = process.env.API_BACKEND_URL || "http://localhost:5000/api/users" // Updated
+const API_URL = "https://event-management-1488-7xkn5sfrb-my-apps-projects-4e0b7257.vercel.app/" // Updated
 console.log("Backend URL:", API_URL);
 // console.log("Backend URL:", backendurl);
 
