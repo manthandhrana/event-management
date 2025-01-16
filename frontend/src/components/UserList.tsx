@@ -113,7 +113,7 @@ const UserList: React.FC = () => {
     setEditData({ username: user.username, age: user.age, hobbies: user.hobbies });
   };
 
- const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
+const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
   event.preventDefault();
 
   const hobby = event.dataTransfer.getData('hobby');
@@ -147,7 +147,6 @@ const UserList: React.FC = () => {
         )
       );
 
-      window.location.reload();
       alert(`Hobby "${hobby}" added to ${user.username}`);
 
       setNodes((prevNodes) => {
@@ -184,27 +183,6 @@ const UserList: React.FC = () => {
     }
   }
 };
-
-          const uniqueHobbyNodeId = `${user._id}-hobby-${hobby}-${Date.now()}`;
-          updatedNodes.push({
-            id: uniqueHobbyNodeId,
-            data: { label: hobby },
-            position: { x: 200, y: 200 },
-            type: 'output',
-          });
-
-          setEdges((prevEdges) => [
-            ...prevEdges,
-            { id: `e-${user._id}-${uniqueHobbyNodeId}`, source: user._id, target: uniqueHobbyNodeId },
-          ]);
-
-          return updatedNodes;
-        });
-      } catch (error) {
-        alert('Error updating user hobbies');
-      }
-    }
-  };
 
   return (
     <ReactFlowProvider>
