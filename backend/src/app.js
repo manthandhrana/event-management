@@ -16,7 +16,7 @@ dotenv.config();
 connectDB();
 
 app.use(cors({
-  origin:["forntendCorsUrl"], // Allow all origins
+  origin:*, // Allow all origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow all HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Add any other headers as needed
 }));
