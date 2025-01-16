@@ -9,7 +9,7 @@ export const getUsers = async () => {
   return response.json();
 };
 
-export const createUser = async (user: { username: string; age: number;hobbies:String }) => {
+export const createUser = async (user: { username: string; age: number;hobbies:string[] }) => {
   const response = await fetch(`${API_URL}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
