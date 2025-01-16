@@ -113,57 +113,77 @@ const UserList: React.FC = () => {
     setEditData({ username: user.username, age: user.age, hobbies: user.hobbies });
   };
 
-  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
+ const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
+  event.preventDefault();
 
-    const hobby = event.dataTransfer.getData('hobby');
-    const targetNodeId = event.target?.getAttribute('data-id');
+  const hobby = event.dataTransfer.getData('hobby');
+  const targetNodeId = (event.target as HTMLElement)?.getAttribute('data-id');
 
-    if (hobby && targetNodeId) {
-      try {
-        const user = users.find((user) => user._id === targetNodeId);
+  if (hobby && targetNodeId) {
+    try {
+      const user = users.find((user) => user._id === targetNodeId);
 
-        if (!user) {
-          alert('No valid user node found');
-          return;
-        }
+      if (!user) {
+        alert('No valid user node found');
+        return;
+      }
 
-        const hobbiesArray = Array.isArray(user.hobbies)
-          ? user.hobbies
-          : user.hobbies.split(',');
+      const hobbiesArray = Array.isArray(user.hobbies)
+        ? user.hobbies
+        : user.hobbies.split(',');
 
-        if (hobbiesArray.includes(hobby)) {
-          alert(`Hobby "${hobby}" already exists for ${user.username}`);
-          window.location.reload();
-          return;
-        }
-
-        const updatedHobbies = [...hobbiesArray, hobby];
-        await updateUser(user._id, { hobbies: updatedHobbies });
-
-        setUsers((prevUsers) =>
-          prevUsers.map((u) =>
-            u._id === user._id ? { ...u, hobbies: updatedHobbies } : u
-          )
-        );
-
-        
+      if (hobbiesArray.includes(hobby)) {
+        alert(`Hobby "${hobby}" already exists for ${user.username}`);
         window.location.reload();
-        alert(`Hobby "${hobby}" added to ${user.username}`);
+        return;
+      }
 
-        setNodes((prevNodes) => {
-          const updatedNodes = prevNodes.map((node) => {
-            if (node.id === user._id) {
-              return {
-                ...node,
-                data: {
-                  ...node.data,
-                  label: `${user.username} (${user.age})\nHobbies: ${updatedHobbies.join(', ')}`,
-                },
-              };
-            }
-            return node;
-          });
+      const updatedHobbies = [...hobbiesArray, hobby];
+      await updateUser(user._id, { hobbies: updatedHobbies });
+
+      setUsers((prevUsers) =>
+        prevUsers.map((u) =>
+          u._id === user._id ? { ...u, hobbies: updatedHobbies } : u
+        )
+      );
+
+      window.location.reload();
+      alert(`Hobby "${hobby}" added to ${user.username}`);
+
+      setNodes((prevNodes) => {
+        const updatedNodes = prevNodes.map((node) => {
+          if (node.id === user._id) {
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                label: `${user.username} (${user.age})\nHobbies: ${updatedHobbies.join(', ')}`,
+              },
+            };
+          }
+          return node;
+        });
+
+        const uniqueHobbyNodeId = `${user._id}-hobby-${hobby}-${Date.now()}`;
+        updatedNodes.push({
+          id: uniqueHobbyNodeId,
+          data: { label: hobby },
+          position: { x: 200, y: 200 },
+          type: 'output',
+        });
+
+        setEdges((prevEdges) => [
+          ...prevEdges,
+          { id: `e-${user._id}-${uniqueHobbyNodeId}`, source: user._id, target: uniqueHobbyNodeId },
+        ]);
+
+        return updatedNodes;
+      });
+    } catch (error) {
+      alert('Error updating user hobbies');
+    }
+  }
+};
 
           const uniqueHobbyNodeId = `${user._id}-hobby-${hobby}-${Date.now()}`;
           updatedNodes.push({
