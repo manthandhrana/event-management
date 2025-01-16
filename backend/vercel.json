@@ -5,9 +5,5 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "src/app.js" },
-    { "src": "/(.*)", "dest": "src/app.js" }  ],
-    "methods":["GET","PUT","POST","DELETE"],
-    "headers":{
-      "Access-Control-Allow-Origin":"*"
-    }
+    { "src": "/(.*)", "dest": "src/app.js" }  ]
 }
